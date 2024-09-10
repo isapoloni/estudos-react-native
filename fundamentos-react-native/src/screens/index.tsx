@@ -42,7 +42,7 @@ export function Home() {
       </Text>
 
       <Text style={styles.eventDate}>
-        Sexta, 4 de Novembro de 2022.
+        Sexta, 10 de Setembro de 2024.
       </Text>
 
       <View style={styles.form}>
