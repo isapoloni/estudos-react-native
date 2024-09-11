@@ -9,27 +9,37 @@ export function Home() {
     const [isFocused, setIsFocused] = useState(false);
     const [tasks, setTasks] = useState<string[]>([]);
     const [newTask, setNewTasks] = useState('')
+    const [completedTasks, setCompletedTasks] = useState<number>(0);
 
-    function hanndleAddTask() {
-        setTasks(prevState => [...prevState, newTask])
-        setNewTasks('')
+    function handleAddTask() {
+        if (newTask.trim() === '') return; // Não permite adicionar tarefas vazias
+        setTasks(prevState => [...prevState, newTask]);
+        setNewTasks('');
     }
 
     function handleTaskRemove(newTask: string) {
         Alert.alert("Remover", `Remover a task ${newTask}?`, [
-          {
-            text: 'Sim',
-            onPress: () => {
-              setTasks((prevState: any[]) => prevState.filter(task => task !== newTask));
-              Alert.alert("Deletado! a task foi removida da lista.");
+            {
+                text: 'Sim',
+                onPress: () => {
+                    setTasks((prevState: any[]) => prevState.filter(task => task !== newTask));
+                    Alert.alert("Deletado! a task foi removida da lista.");
+                }
+            },
+            {
+                text: 'Não',
+                style: 'cancel'
             }
-          },
-          {
-            text: 'Não',
-            style: 'cancel'
-          }
         ]);
-      }
+    }
+
+    function handleTaskToggle(checked: boolean) {
+        if (checked) {
+            setCompletedTasks(prevState => prevState + 1); 
+        } else {
+            setCompletedTasks(prevState => prevState - 1); 
+        }
+    }
 
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -49,7 +59,7 @@ export function Home() {
                         onChangeText={setNewTasks}
                         value={newTask}
                     />
-                    <TouchableOpacity style={styles.button} onPress={hanndleAddTask}>
+                    <TouchableOpacity style={styles.button} onPress={handleAddTask}>
                         <AntDesign
                             name="pluscircleo"
                             size={16}
@@ -64,7 +74,7 @@ export function Home() {
                                 Criadas
                             </Text>
                             <Text style={styles.counterNumber}>
-                                0
+                                {tasks.length}
                             </Text>
                         </View>
                         <View style={styles.tasks}>
@@ -72,7 +82,7 @@ export function Home() {
                                 Concluídas
                             </Text>
                             <Text style={styles.counterNumber}>
-                                0
+                                {completedTasks}
                             </Text>
                         </View>
                     </View>
@@ -83,7 +93,8 @@ export function Home() {
                         renderItem={({ item }) => (
                             <Card
                                 task={item}
-                                onRemove={() => handleTaskRemove(item)} 
+                                onRemove={() => handleTaskRemove(item)}
+                                onToggle={handleTaskToggle}
                             />
                         )}
                         showsVerticalScrollIndicator={false}

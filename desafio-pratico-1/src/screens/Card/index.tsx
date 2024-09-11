@@ -9,11 +9,16 @@ import { useState } from 'react';
 type Props = {
     task: string;
     onRemove: () => void;
+    onToggle: (checked: boolean) => void;
 }
 
-export function Card({ task, onRemove }: Props) {
+export function Card({ task, onRemove, onToggle  }: Props) {
     const [isChecked, setIsChecked] = useState(false);
-    console.log('task', task)
+    
+    function handleCheck(checked: boolean) {
+        setIsChecked(checked);
+        onToggle(checked);  
+    }
 
     return (
         <View style={styles.containerCard}>
@@ -23,16 +28,16 @@ export function Card({ task, onRemove }: Props) {
                 unFillColor={colors['gray-400']}
                 innerIconStyle={{ borderWidth: 1 }}
                 isChecked={isChecked}
-                onPress={(checked: boolean) => setIsChecked(checked)}
+                onPress={(checked: boolean) => handleCheck(checked)}                
                 text={task}
                 textStyle={[
                     styles.textCard,
                     {
-                        color: colors['gray-100'], // Garante a cor correta
-                        textDecorationLine: isChecked ? 'line-through' : 'none', // Adiciona risco ao texto quando marcado
+                        color: isChecked? colors['gray-300'] : colors['gray-100'], 
+                        textDecorationLine: isChecked ? 'line-through' : 'none',
                     }
                 ]}
-                style={{ flex: 1 }} // Garante que o checkbox ocupe a largura necessária
+                style={{ flex: 1 }}
             />
             <TouchableOpacity onPress={onRemove}>
                 <Feather name="trash-2" size={20} color={colors["gray-300"]} />

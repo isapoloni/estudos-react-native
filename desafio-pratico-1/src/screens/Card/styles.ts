@@ -19,5 +19,6 @@ export const styles = StyleSheet.create({
         fontSize: 14,
         flex: 1, 
         marginLeft: 5,
+        marginRight: 5
     }
 });
